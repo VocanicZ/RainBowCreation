@@ -18,7 +18,7 @@ out/
 *.ctxt
 
 # Package Files #
-#*.jar
+*.jar
 *.war
 *.nar
 *.ear
@@ -95,7 +95,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-#target/
+target/
 
 pom.xml.tag
 pom.xml.releaseBackup
