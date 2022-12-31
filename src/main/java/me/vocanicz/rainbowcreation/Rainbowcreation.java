@@ -1,7 +1,6 @@
 package me.vocanicz.rainbowcreation;
 
 import me.vocanicz.rainbowcreation.chat.Console;
-import me.vocanicz.rainbowcreation.thread.Locker;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -9,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Rainbowcreation extends JavaPlugin implements Listener {
     private static Rainbowcreation instance;
 
-    public static final String BUILD_NUMBER = "6";
+    public static final String BUILD_NUMBER = "10";
 
     public static Rainbowcreation getInstance() {return instance;}
     @Override
