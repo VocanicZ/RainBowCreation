@@ -2,7 +2,7 @@ name: RainBowCreation
 version: '${project.version}'
 main: me.vocanicz.rainbowcreation.Rainbowcreation
 api-version: 1.19
-prefix: RBC
+prefix: RBCmp
 load: STARTUP
 authors: [ VocanicZ ]
 description: RainBowCreation Plugin for multi paper
