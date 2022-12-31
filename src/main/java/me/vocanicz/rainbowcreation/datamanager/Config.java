@@ -1,6 +1,7 @@
 package me.vocanicz.rainbowcreation.datamanager;
 
 import me.vocanicz.rainbowcreation.Rainbowcreation;
+import me.vocanicz.rainbowcreation.chat.Console;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -16,6 +17,7 @@ public class Config {
     private final String file;
 
     public void saveDefaultConfig() {
+        Console.info("");
         if (configFile == null) {
             configFile = new File(plugin.getDataFolder(), file);
         }
@@ -24,6 +26,7 @@ public class Config {
         }
     }
     public Config(Rainbowcreation plugin, String file) {
+        Console.info("");
         this.plugin = plugin;
         this.file = file;
         saveDefaultConfig();

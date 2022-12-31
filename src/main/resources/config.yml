@@ -12,3 +12,21 @@
 #resource pack: https://www.dropbox.com/s/q9sev4nihzbmfil/RainBowCreation.zip?dl=1
 
 auto-update: true
+
+server-name: auto-generated
+server-timezone: Etc/GMT
+private-server-name: myServer1
+
+mySQL:
+  username: ""
+  password: ""
+  data-fetching: 15 #minute
+  debug:
+    enable: false
+    url: jdbc:mysql://localhost:3306/myDatabase
+    user: ""
+    pswd: ""
+
+redis:
+  enable: false
+  server-ip: default
