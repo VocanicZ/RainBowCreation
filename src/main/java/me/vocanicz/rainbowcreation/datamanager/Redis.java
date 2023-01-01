@@ -4,15 +4,15 @@ import me.vocanicz.rainbowcreation.Rainbowcreation;
 import me.vocanicz.rainbowcreation.chat.Console;
 import redis.clients.jedis.Jedis;
 
-import java.io.StringReader;
 import java.util.List;
 
 public class Redis {
-    private Jedis jedis;
+    private final Jedis jedis;
 
     public Redis() {
         // Connect to the Redis server running on localhost
         String host = Rainbowcreation.getInstance().getConfig().getString("redis.server-ip");
+        assert host != null;
         if (host.equals("default")) {
             host = "localhost";
         }

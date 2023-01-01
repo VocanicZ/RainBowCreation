@@ -4,8 +4,6 @@ import me.vocanicz.rainbowcreation.Rainbowcreation;
 import me.vocanicz.rainbowcreation.chat.Console;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.util.FileUtil;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.logging.FileHandler;
 
 public class Config {
     private final Rainbowcreation plugin;
@@ -24,15 +21,20 @@ public class Config {
     private final String file;
 
     public void saveDefaultConfig() {
-        Console.info("");
         if (configFile == null) {
-            Console.info("Config null");
-            configFile = new File(plugin.getDataFolder()+File.separator+file.replace("/", ""));
+            configFile = new File(plugin.getDataFolder()+File.separator+file);
         }
         Console.info("config = " + configFile.getPath());
         if (!configFile.exists()) {
-            Console.info("File not exits");
-            plugin.saveResource(file.substring(file.lastIndexOf("\\") + 1), false);
+            try {
+                Path file2 = configFile.toPath();
+                if (!Files.exists(file2)) {
+                    Files.createDirectories(file2.getParent());
+                    Files.copy(Objects.requireNonNull(plugin.getResource(file.replace("\\", "/"))), file2);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     public Config(Rainbowcreation plugin, String file) {
@@ -42,17 +44,19 @@ public class Config {
         saveDefaultConfig();
     }
 
-    public void reloadConfig() {
+    public void reloadConfig() throws InterruptedException {
         if (configFile == null)
             configFile = new File(plugin.getDataFolder(), file);
+        plugin.locked.lock();
         dataConfig = YamlConfiguration.loadConfiguration(configFile);
         InputStream defaultStream = plugin.getResource(file);
         if (defaultStream != null) {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
             this.dataConfig.setDefaults(defaultConfig);
         }
+        plugin.locked.unlock();
     }
-    public FileConfiguration getConfig() {
+    public FileConfiguration getConfig() throws InterruptedException {
         if (dataConfig == null)
             reloadConfig();
         return dataConfig;
@@ -62,19 +66,21 @@ public class Config {
         try {
             if (dataConfig == null || configFile == null)
                 return;
+            plugin.locked.lock();
             getConfig().save(configFile);
         } catch (Exception ignored) {}
+        plugin.locked.unlock();
     }
 
-    public Object get(UUID uuid, String key) {
+    public Object get(UUID uuid, String key) throws InterruptedException {
         return getConfig().get("player." + uuid + "." + key);
     }
 
-    public void set(UUID uuid, String key, String value) {
+    public void set(UUID uuid, String key, String value) throws InterruptedException {
         getConfig().set("player." + uuid + "." + key, value);
     }
 
-    public boolean hasData(UUID uuid, String key) {
+    public boolean hasData(UUID uuid, String key) throws InterruptedException {
         return getConfig().contains("player." + uuid + "." + key);
     }
 }

@@ -17,6 +17,7 @@ public class Tester {
             Console.info("Testing service: " + service);
             switch (service) {
                 case ("yml-data"):
+                case ("mySQL"):
                     break;
                 case ("redis"):
                     Console.info("ping test");
@@ -29,8 +30,6 @@ public class Tester {
                         Console.info("Redis server not found make sure your redis server running");
                         result = false;
                     }
-                    break;
-                case ("mySQL"):
                     break;
             }
         }

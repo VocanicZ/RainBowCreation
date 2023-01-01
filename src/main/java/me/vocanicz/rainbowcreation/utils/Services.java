@@ -4,7 +4,6 @@ import me.vocanicz.rainbowcreation.Rainbowcreation;
 import me.vocanicz.rainbowcreation.chat.Console;
 import me.vocanicz.rainbowcreation.datamanager.Config;
 import me.vocanicz.rainbowcreation.datamanager.Redis;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.*;
 
@@ -53,11 +52,14 @@ public class Services {
             plugin.redis = new Redis();
             plugin.redis.auth(plugin.getConfig().getString("redis.password"));
         } else if (serviceName.equals("yml-data")){
-            plugin.account = new Config(plugin, "account.yml");
-            plugin.itemdata = new Config(plugin, "/data\\itemData.yml");
-            plugin.playerdata = new Config(plugin, "/data\\playerData.yml");
-            plugin.serverdata = new Config(plugin, "/data\\serverData.yml");
-            plugin.link = new Config(plugin, "link.yml");
+            plugin.itemdata = new Config(plugin, "data\\itemData.yml");
+            plugin.playerdata = new Config(plugin, "data\\playerData.yml");
+            plugin.serverdata = new Config(plugin, "data\\serverData.yml");
+            plugin.link = new Config(plugin, "gui\\link.yml");
+            plugin.link = new Config(plugin, "gui\\default.yml");
+            plugin.link = new Config(plugin, "gui\\main\\main.yml");
+            plugin.link = new Config(plugin, "gui\\main\\curios.yml");
+            plugin.account = new Config(plugin, "password\\account.yml");
         }
     }
 

@@ -1,6 +1,7 @@
 package me.vocanicz.rainbowcreation;
 
 import me.vocanicz.rainbowcreation.chat.Console;
+import me.vocanicz.rainbowcreation.datamanager.AtomicBool;
 import me.vocanicz.rainbowcreation.datamanager.Config;
 import me.vocanicz.rainbowcreation.datamanager.Redis;
 import me.vocanicz.rainbowcreation.thread.ServerThread;
@@ -13,7 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Rainbowcreation extends JavaPlugin implements Listener {
     private static Rainbowcreation instance;
 
-    public static final String BUILD_NUMBER = "58";
+    public static final String BUILD_NUMBER = "71";
 
     public static Rainbowcreation getInstance() {return instance;}
     public Redis redis;
@@ -25,12 +26,14 @@ public final class Rainbowcreation extends JavaPlugin implements Listener {
     public Config serverdata;
 
     public Services services;
+    public AtomicBool locked = new AtomicBool();
 
     @Override
     public void onEnable() {
         instance = this;
         getServer().getPluginManager().registerEvents(this, this);
         saveDefaultConfig();
+
         Console.info("current build" + BUILD_NUMBER);
         services = new Services();
         services.readAll();
