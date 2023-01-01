@@ -1,9 +1,11 @@
 package me.vocanicz.rainbowcreation.datamanager;
 
-
 import me.vocanicz.rainbowcreation.Rainbowcreation;
 import me.vocanicz.rainbowcreation.chat.Console;
 import redis.clients.jedis.Jedis;
+
+import java.io.StringReader;
+import java.util.List;
 
 public class Redis {
     private Jedis jedis;
@@ -26,6 +28,12 @@ public class Redis {
         return value;
     }
 
+    public String get(String key, int expireAfter) {
+        Console.info("expireAfter " + expireAfter + " second");
+        jedis.expire(key, expireAfter);
+        return get(key);
+    }
+
     public boolean set(String key, String value) {
         // Set the value of the specified key
         Console.info(key + " = " + value);
@@ -40,9 +48,29 @@ public class Redis {
         return true;
     }
 
+    public boolean set(String key, String value, int expireAfter) {
+        boolean bool = set(key, value);
+        Console.info("expireAfter " + expireAfter + " second");
+        jedis.expire(key, expireAfter);
+        return bool;
+    }
+
     public String ping() {
         Console.info("");
         return jedis.ping();
+    }
+
+    public List<String> cfgGet(String key) {
+        Console.info(key);
+        List<String> result = jedis.configGet (key);
+        Console.info("return " + result);
+        return result;
+    }
+
+    public boolean auth(String password) {
+        String result = jedis.auth(password);
+        Console.info(result);
+        return result.equals("OK");
     }
 
     public boolean locked() {
@@ -55,6 +83,7 @@ public class Redis {
            return false;
         } else return !locked.equals("0");
     }
+
 
     public boolean Lock() {
         Console.info("logging..");

@@ -9,25 +9,54 @@
 #RainBowCreationMultiPaper by VocanicZ
 #Official Website: discord.gg/p7fuWS8
 #discord: p7fyWS8
-#resource pack: https://www.dropbox.com/s/q9sev4nihzbmfil/RainBowCreation.zip?dl=1
-#config-version: 21.
+#resource pack: auto-generate
+#config-version: 58.
 
-auto-update: true
+RanBowCreationNetwork:
+  accountFile: account.yml  #you will receive this file in email after registered to our network
+                            #replace this file in folder plugins/RainBowCreation
+
+auto-update:
+  pluginJarfile: # set to false your server will not connect to RainBowCreationNetwork
+    enable: true
+  configYML:
+    # (default, always, never) will not change this config.yml if patch log required update
+    # always will check every time that masterConfig changed (not recommend)
+    mode: default
+    # (now, never) change this to now and run server once will create this config backup to log-directory -> config
+    # after it created backup this field automatically change to lastBackupTimeStamp
+    backup-this-config: never
 
 server-name: auto-generated
-server-timezone: Etc/GMT
-private-server-name: myServer1
+server-timezone: auto-generated
 
-mySQL:
-  username: ""
-  password: ""
-  data-fetching: 15 #minute
-  debug:
+################################## DATA MANAGER ########################################################################
+yml-data:
+  enable: true  # you can disable this if you enable Redis server
+  directory: /data
+
+mySQL:  # change this to true after
+  enable: false
+  data-fetching: 15 #minute to fetch all data store on your local file/redis to sql datacenter
+  debug:  # enable debug will change query database to your local url
     enable: false
     url: jdbc:mysql://localhost:3306/myDatabase
     user: ""
     pswd: ""
 
-redis:
-  enable: false
-  server-ip: default
+redis:            # to setup your redis-server see https://redis.io/docs/getting-started/
+  enable: false   # enable this service will extremely increase your server data calculation speed (use more available ram on your env)
+  server-ip: localhost  #http://yourRedisIp:port (default localhost)
+  cashing-expire: 1     #default 1 second
+  password: ""          #to set your redis password do "config set requirepass yourPassWord" and then restart you redis-server
+  acl-user:
+    enable: false
+    path: ""
+
+################################################### MISC. ##############################################################
+misc:   # DO NOT CHANGE ANY OF THIS except there is some error
+  log-directory: /log
+  rollback:
+    enable: false
+    mode: to_last_log
+    type: master_sql
