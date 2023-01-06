@@ -5,19 +5,20 @@ import me.vocanicz.rainbowcreation.chat.Console;
 import redis.clients.jedis.Jedis;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Redis {
+    private final Rainbowcreation plugin = Rainbowcreation.getInstance();
     private final Jedis jedis;
+    public int cashing_expire;
 
     public Redis() {
         // Connect to the Redis server running on localhost
-        String host = Rainbowcreation.getInstance().getConfig().getString("redis.server-ip");
-        assert host != null;
-        if (host.equals("default")) {
-            host = "localhost";
-        }
+        String host = plugin.defaultConfig.getString("redis.server-ip");
         Console.info("Create New Redis Connection to -> " + host);
         jedis = new Jedis(host);
+        auth(plugin.defaultConfig.getString("redis.password"));
+        cashing_expire = Integer.parseInt(Objects.requireNonNull(plugin.defaultConfig.getString("redis.cashing-expire")));
     }
 
     public String get(String key) {
@@ -34,25 +35,23 @@ public class Redis {
         return get(key);
     }
 
-    public boolean set(String key, String value) {
+    public void set(String key, String value) {
         // Set the value of the specified key
         Console.info(key + " = " + value);
         if (locked()) {
             Console.info("{ERROR} cannot set() because Atomic was locked");
-            return false;
+            return;
         }
         Lock();
         jedis.set(key, value);
         Console.info("complete!");
         Unlock();
-        return true;
     }
 
-    public boolean set(String key, String value, int expireAfter) {
-        boolean bool = set(key, value);
+    public void set(String key, String value, int expireAfter) {
+        set(key, value);
         Console.info("expireAfter " + expireAfter + " second");
         jedis.expire(key, expireAfter);
-        return bool;
     }
 
     public String ping() {
@@ -62,15 +61,12 @@ public class Redis {
 
     public List<String> cfgGet(String key) {
         Console.info(key);
-        List<String> result = jedis.configGet (key);
-        Console.info("return " + result);
-        return result;
+        return jedis.configGet (key);
     }
 
-    public boolean auth(String password) {
+    public void auth(String password) {
         String result = jedis.auth(password);
         Console.info(result);
-        return result.equals("OK");
     }
 
     public boolean locked() {
@@ -85,26 +81,24 @@ public class Redis {
     }
 
 
-    public boolean Lock() {
+    public void Lock() {
         Console.info("logging..");
         if (!locked()) {
             jedis.set("locked", "1");
             Console.info("locked!");
-            return true;
+            return;
         }
         Console.info("{ERROR} cannot lock() Atomic because Atomic was locked");
-        return false;
     }
 
-    public boolean Unlock() {
+    public void Unlock() {
         Console.info("unlocking..");
         if (locked()) {
             jedis.set("locked", "0");
             Console.info("unlocked!");
-            return true;
+            return;
         }
         Console.info("{WARN} cannot unlock() Atomic because Atomic was already unlocked");
-        return false;
     }
 
 }

@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Config {
     private final Rainbowcreation plugin;
@@ -44,19 +43,17 @@ public class Config {
         saveDefaultConfig();
     }
 
-    public void reloadConfig() throws InterruptedException {
+    public void reloadConfig() {
         if (configFile == null)
             configFile = new File(plugin.getDataFolder(), file);
-        plugin.locked.lock();
         dataConfig = YamlConfiguration.loadConfiguration(configFile);
         InputStream defaultStream = plugin.getResource(file);
         if (defaultStream != null) {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
             this.dataConfig.setDefaults(defaultConfig);
         }
-        plugin.locked.unlock();
     }
-    public FileConfiguration getConfig() throws InterruptedException {
+    public FileConfiguration getConfig() {
         if (dataConfig == null)
             reloadConfig();
         return dataConfig;
@@ -72,15 +69,17 @@ public class Config {
         plugin.locked.unlock();
     }
 
-    public Object get(UUID uuid, String key) throws InterruptedException {
-        return getConfig().get("player." + uuid + "." + key);
+    public Object get(String key) {
+        return getConfig().get(key);
     }
 
-    public void set(UUID uuid, String key, String value) throws InterruptedException {
-        getConfig().set("player." + uuid + "." + key, value);
+    public void set(String key, Object value) throws InterruptedException {
+        plugin.locked.lock();
+        getConfig().set(key, value);
+        plugin.locked.unlock();
     }
 
-    public boolean hasData(UUID uuid, String key) throws InterruptedException {
-        return getConfig().contains("player." + uuid + "." + key);
+    public boolean hasData(String key) {
+        return getConfig().contains(key);
     }
 }

@@ -19,7 +19,7 @@ public class ServerThread extends BukkitRunnable {
     public ServerThread() {
     }
 
-    private void thread() throws InterruptedException {
+    private void thread() {
         plugin.itemdata.saveConfig();
         plugin.playerdata.saveConfig();
         plugin.serverdata.saveConfig();
@@ -48,7 +48,7 @@ public class ServerThread extends BukkitRunnable {
         }
     }
 
-    private void query() throws InterruptedException {
+    private void query() {
         List<Player> onlinePlayer = new ArrayList<>(Bukkit.getOnlinePlayers());
         for (Player player : onlinePlayer) {
             //do player update
@@ -67,12 +67,8 @@ public class ServerThread extends BukkitRunnable {
         new BukkitRunnable(){
             public void run(){
                 ServerRole.genRole();
-                try {
-                    thread();
-                    query();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                thread();
+                query();
             }
         }.runTaskTimer(plugin, delay, cycle);
     }

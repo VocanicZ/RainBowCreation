@@ -3,6 +3,7 @@ package me.vocanicz.rainbowcreation.utils;
 import me.vocanicz.rainbowcreation.Rainbowcreation;
 import me.vocanicz.rainbowcreation.chat.Console;
 import me.vocanicz.rainbowcreation.datamanager.Config;
+import me.vocanicz.rainbowcreation.datamanager.MySql;
 import me.vocanicz.rainbowcreation.datamanager.Redis;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public class Services {
     }
 
     public void read(String serviceName) {
-        boolean boo = plugin.getConfig().getBoolean(serviceName + ".enable");
+        boolean boo = plugin.defaultConfig.getBoolean(serviceName + ".enable");
         Console.info(serviceName + " " + boo);
         if (boo)
             toEnables.add(serviceName);
@@ -48,18 +49,24 @@ public class Services {
     }
 
     public void enable(String serviceName) {
-        if (serviceName.equals("redis")) {
-            plugin.redis = new Redis();
-            plugin.redis.auth(plugin.getConfig().getString("redis.password"));
-        } else if (serviceName.equals("yml-data")){
-            plugin.itemdata = new Config(plugin, "data\\itemData.yml");
-            plugin.playerdata = new Config(plugin, "data\\playerData.yml");
-            plugin.serverdata = new Config(plugin, "data\\serverData.yml");
-            plugin.link = new Config(plugin, "gui\\link.yml");
-            plugin.link = new Config(plugin, "gui\\default.yml");
-            plugin.link = new Config(plugin, "gui\\main\\main.yml");
-            plugin.link = new Config(plugin, "gui\\main\\curios.yml");
-            plugin.account = new Config(plugin, "password\\account.yml");
+        switch (serviceName) {
+            case ("redis"):
+                plugin.redis = new Redis();
+                break;
+            case ("yml-data"):
+                String prefix = plugin.defaultConfig.getString(serviceName + ".directory");
+                String suffix = ".yml";
+                plugin.itemdata = new Config(plugin, prefix + "\\playerData" + suffix);
+                plugin.playerdata = new Config(plugin, prefix + "\\playerData" + suffix);
+                plugin.serverdata = new Config(plugin, prefix + "\\serverData" + suffix);
+                prefix = "gui";
+                //do gui nested yml
+
+                plugin.account = new Config(plugin, "password\\account" + suffix);
+                break;
+            case ("mySQL"):
+                plugin.sql = new MySql();
+                break;
         }
     }
 

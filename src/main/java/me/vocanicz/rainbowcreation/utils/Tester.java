@@ -17,7 +17,11 @@ public class Tester {
             Console.info("Testing service: " + service);
             switch (service) {
                 case ("yml-data"):
+                    //do
+                    break;
                 case ("mySQL"):
+                    Console.info("connection test");
+                    Console.info("this server first seen at " + plugin.sql.get("server_info", "start_time", "id", 1));
                     break;
                 case ("redis"):
                     Console.info("ping test");
@@ -29,6 +33,25 @@ public class Tester {
                     } else {
                         Console.info("Redis server not found make sure your redis server running");
                         result = false;
+                    }
+                    Console.info("expire_test");
+                    int exp = plugin.redis.cashing_expire;
+                    plugin.redis.set("exp_test", "expire in " + exp + " second(s).", exp);
+                    Console.info("waiting " + exp);
+                    try {
+                        Thread.sleep(exp * 1000L / 2);
+                        if (plugin.redis.get("exp_test").equals("expire in " + exp + " second(s).")) {
+                            Thread.sleep(exp * 1000L / 2);
+                            if (plugin.redis.get("exp_test") != null) {
+                                result = false;
+                            } else {
+                                Console.info("pass");
+                            }
+                        } else {
+                            result = false;
+                        }
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
                     break;
             }

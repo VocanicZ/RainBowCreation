@@ -10,7 +10,7 @@
 #Official Website: discord.gg/p7fuWS8
 #discord: p7fyWS8
 #resource pack: auto-generate
-#config-version: 71.
+#config-version: 86.
 
 RanBowCreationNetwork:
   accountFile: account.yml  #you will receive this file in email after registered to our network
@@ -33,7 +33,7 @@ server-timezone: auto-generated
 ################################## DATA MANAGER ########################################################################
 yml-data:
   enable: true  # you can disable this if you enable Redis server
-  directory: /data
+  directory: data
 
 mySQL:  # change this to true after
   enable: false
@@ -51,11 +51,11 @@ redis:            # to setup your redis-server see https://redis.io/docs/getting
   password: ""          #to set your redis password do "config set requirepass yourPassWord" and then restart you redis-server
   acl-user:
     enable: false
-    path: ""
+    path: account.yml
 
 ################################################### MISC. ##############################################################
 misc:   # DO NOT CHANGE ANY OF THIS except there is some error
-  log-directory: /log
+  log-directory: log
   rollback:
     enable: false
     mode: to_last_log
