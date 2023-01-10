@@ -1,6 +1,6 @@
 # RainBowCreation mainnet
 RainBowCreation by VocanicZ
-rainbowcreation.net       or  vocanicz.thddns.net:2999 mainnet 
+rainbowcreation.net       or  vocanicz.thddns.net:2999 mainnet
 test.rainbowcreation.net  or  vocanicz.thddns.net:2998 testnet
 
 !this plugin based-on multipaper + velocity core server!
