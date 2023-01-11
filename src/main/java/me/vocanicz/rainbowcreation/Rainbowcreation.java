@@ -13,13 +13,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.SQLException;
-import java.util.List;
-
 public final class Rainbowcreation extends JavaPlugin implements Listener {
     private static Rainbowcreation instance;
 
-    public static final String BUILD_NUMBER = "86";
+    public static final String BUILD_NUMBER = "89";
 
     public static Rainbowcreation getInstance() {return instance;}
     public FileConfiguration defaultConfig;
@@ -28,7 +25,6 @@ public final class Rainbowcreation extends JavaPlugin implements Listener {
     public MySql sql;
 
     public Config account;
-    public List<List<Config>> gui;
     public Config itemdata;
     public Config playerdata;
     public Config serverdata;
